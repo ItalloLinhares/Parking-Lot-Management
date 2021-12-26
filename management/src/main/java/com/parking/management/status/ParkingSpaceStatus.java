@@ -1,4 +1,4 @@
-package com.parking.management.parkingSpaceStatus;
+package com.parking.management.status;
 
 public enum ParkingSpaceStatus {
     AVAILABLE,

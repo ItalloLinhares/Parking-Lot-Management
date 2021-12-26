@@ -1,37 +1,46 @@
 package com.parking.management.controller;
 
-
-import com.parking.management.model.ParkingSpaceModel;
-import com.parking.management.parkingSpaceStatus.ParkingSpaceStatus;
+import com.parking.management.dto.ParkingSpaceAvailableDTO;
+import com.parking.management.dto.ParkingSpaceUnavailableDTO;
+import com.parking.management.model.ParkingSpace;
 import com.parking.management.repository.ParkingSpaceRepository;
 import com.parking.management.service.ParkingSpaceService;
+import com.parking.management.status.ParkingSpaceStatus;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
+import java.util.List;
+//ESSE AQUI PELO AMOR DE DEUS
 
 @RestController
-@RequestMapping("/management") @AllArgsConstructor
+@RequestMapping("/management") @AllArgsConstructor @Transactional
 public class IndexController {
-
     private final ParkingSpaceService parkingSpaceService;
+    private final ParkingSpaceRepository parkingSpaceRepository;
 
     @RequestMapping("/create/parkingspaces")
-    public void status(){
-        parkingSpaceService.createParkingSpace();
-    }
-
-    
+    public void createParkingSpaces(){
+            parkingSpaceService.createParkingSpace();
+        }
 
     @GetMapping("/listParkingSpace")
-    public ResponseEntity<String> listParkingSpace(){
-        return null;
+    public List<ParkingSpace> listParkingSpace(){
+        List<ParkingSpace> listParkingSpace = parkingSpaceService.listParkingSpace();
+        return listParkingSpace;
     }
 
+    @GetMapping("/listParkingSpaceAvailable")
+    public List<ParkingSpaceAvailableDTO> listParkingSpaceAvailable(){
+        List<ParkingSpaceAvailableDTO> listParkingSpace = parkingSpaceService.listParkingSpaceAvailable();
+        return listParkingSpace;
+    }
 
+    @GetMapping("/listParkingSpaceUnavailable")
+    public List<ParkingSpaceUnavailableDTO> listParkingSpaceUnavailable(){
+        List<ParkingSpaceUnavailableDTO> listParkingSpace = parkingSpaceService.listParkingSpaceUnavailable();
+        return listParkingSpace;
+    }
 }

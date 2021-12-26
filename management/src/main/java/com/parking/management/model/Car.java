@@ -7,9 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Data @Entity @AllArgsConstructor
-public class CarModel {
+public class Car {
     @Id
     private String carLicensePlate;
     private String carModelName;
-
 }
