@@ -4,6 +4,7 @@ import com.parking.management.dto.ParkingSpaceAvailableDTO;
 import com.parking.management.dto.ParkingSpaceUnavailableDTO;
 import com.parking.management.model.ParkingSpace;
 import com.parking.management.repository.ParkingSpaceRepository;
+import com.parking.management.service.OccupationService;
 import com.parking.management.service.ParkingSpaceService;
 import com.parking.management.status.ParkingSpaceStatus;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.List;
 public class IndexController {
     private final ParkingSpaceService parkingSpaceService;
     private final ParkingSpaceRepository parkingSpaceRepository;
+    private final OccupationService occupationService;
 
     @RequestMapping("/create/parkingspaces")
     public void createParkingSpaces() {
@@ -53,4 +55,11 @@ public class IndexController {
     public ResponseEntity vacateParkingSpcae(@RequestBody ParkingSpaceAvailableDTO parkingSpace) {
         return parkingSpaceService.vacateParkingSpcae(parkingSpace);
     }
+
+    @RequestMapping("/saveOccupation")
+    public ResponseEntity saveOccupation (@RequestBody ParkingSpaceAvailableDTO parkingSpace){
+        return occupationService.saveOccupation(parkingSpace);
+    }
+
+
 }

@@ -9,4 +9,6 @@ import lombok.NoArgsConstructor;
 public class ParkingSpaceAvailableDTO {
     private Long id;
     private ParkingSpaceStatus parkingSpaceStatus;
+    private int hourExit;
+    private int minuteEntry;
 }

@@ -2,7 +2,9 @@ package com.parking.management.service;
 
 import com.parking.management.dto.ParkingSpaceAvailableDTO;
 import com.parking.management.dto.ParkingSpaceUnavailableDTO;
+import com.parking.management.model.Occupation;
 import com.parking.management.model.ParkingSpace;
+import com.parking.management.repository.OccupationRepository;
 import com.parking.management.repository.ParkingSpaceRepository;
 import com.parking.management.status.ParkingSpaceStatus;
 import lombok.AllArgsConstructor;
@@ -20,6 +22,8 @@ import static com.parking.management.status.ParkingSpaceStatus.UNAVAILABLE;
 @Transactional @AllArgsConstructor @Service
 public class ParkingSpaceServiceImplementation implements ParkingSpaceService{
     ParkingSpaceRepository parkingSpaceRepository;
+
+    OccupationRepository occupationRepository;
 
     @Override
     public void createParkingSpace() {
@@ -98,13 +102,24 @@ public class ParkingSpaceServiceImplementation implements ParkingSpaceService{
 
     @Override
     public ResponseEntity vacateParkingSpcae(ParkingSpaceAvailableDTO parkingSpaceAvailableDTO) {
-        Optional<ParkingSpace> parkingSpaceid = parkingSpaceRepository.findById(parkingSpaceAvailableDTO.getId());
-        if(parkingSpaceid.isPresent()){
+        Optional<ParkingSpace> parkingSpaceCurrent = parkingSpaceRepository.findById(parkingSpaceAvailableDTO.getId());
+        if(parkingSpaceCurrent.isPresent()){
+            Occupation occupation = new Occupation();
+            occupation.setCar(parkingSpaceCurrent.get().getCar());
+            occupation.setClientCpf(parkingSpaceCurrent.get().getClientCpf());
+            occupation.setHourEntry(parkingSpaceCurrent.get().getHourEntry());
+            occupation.setMinuteEntry(parkingSpaceCurrent.get().getMinuteEntry());
+            occupation.setHourExit(parkingSpaceAvailableDTO.getHourExit());
+            occupation.setMinuteExit(parkingSpaceAvailableDTO.getMinuteEntry());
+            float price = ((parkingSpaceAvailableDTO.getHourExit()- parkingSpaceCurrent.get().getHourEntry())*60) + (parkingSpaceAvailableDTO.getMinuteEntry() - parkingSpaceCurrent.get().getMinuteEntry());
+            occupation.setPrice(price);
+            occupationRepository.save(occupation);
+
             ParkingSpace parkingSpaceUpdated = new ParkingSpace();
             parkingSpaceUpdated.setId(parkingSpaceAvailableDTO.getId());
             parkingSpaceUpdated.setParkingSpaceStatus(parkingSpaceAvailableDTO.getParkingSpaceStatus());
             parkingSpaceRepository.save(parkingSpaceUpdated);
-            return ResponseEntity.ok(parkingSpaceUpdated);
+            return ResponseEntity.ok(occupation);
         }
         else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("id not found");
