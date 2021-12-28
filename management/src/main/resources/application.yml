@@ -10,5 +10,15 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
-
-
+#http://localhost:8080/management/fillParkingSpace
+#  {
+#    "id": 20,
+#    "parkingSpaceStatus": "UNAVAILABLE",
+#    "carro":{
+#      "carLicensePlate": 1,
+#      "carModelName": "honda"
+#    },
+#    "clientCpf": 80,
+#    "hourEntry": "13",
+#    "minuteEntry": "0"
+#  }

@@ -14,7 +14,7 @@ public class ParkingSpace {
     @Id
     private Long id;
     @OneToOne
-    private Car carro;
+    private Car car;
     private Long clientCpf;
     private ParkingSpaceStatus parkingSpaceStatus;
     private int hourEntry;
