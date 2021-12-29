@@ -2,6 +2,7 @@ package com.parking.management.controller;
 
 import com.parking.management.dto.ParkingSpaceAvailableDTO;
 import com.parking.management.dto.ParkingSpaceUnavailableDTO;
+import com.parking.management.model.Occupation;
 import com.parking.management.model.ParkingSpace;
 import com.parking.management.repository.ParkingSpaceRepository;
 import com.parking.management.service.OccupationService;
@@ -11,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -22,10 +24,18 @@ public class IndexController {
     private final ParkingSpaceService parkingSpaceService;
     private final ParkingSpaceRepository parkingSpaceRepository;
     private final OccupationService occupationService;
+    private final RestTemplate restTemplate;
+
 
     @RequestMapping("/create/parkingspaces")
     public void createParkingSpaces() {
         parkingSpaceService.createParkingSpace();
+    }
+
+    @RequestMapping("/listOccupation")
+    public ResponseEntity listOccupation(@RequestBody String findBy){
+        ResponseEntity response = restTemplate.getForEntity("http://localhost:8081/"+findBy, Occupation[].class);
+        return response;
     }
 
     @GetMapping("/listParkingSpace")
